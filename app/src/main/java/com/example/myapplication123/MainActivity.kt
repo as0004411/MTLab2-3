@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
-        lateinit var category: Category
+        lateinit var category: List<Category>
         lateinit var catlist: List<Example>
         lateinit var context: Context
         lateinit var mydb: CatImageDatabase
@@ -44,7 +44,8 @@ class MainActivity : AppCompatActivity() {
         if (counter >= catlist.size - 1) {
         counter = 0
         }
-        Toast.makeText(applicationContext, "Next", Toast.LENGTH_LONG).show()
+                category = catlist.get(counter).categories ?: emptyList()
+                Toast.makeText(applicationContext, "Next", Toast.LENGTH_LONG).show()
         Glide.with(context)
         .load(catlist.get(counter).url)
         .into(imageView_cat)
@@ -63,7 +64,8 @@ class MainActivity : AppCompatActivity() {
         if (counter <= 0) {
         counter = catlist.size - 1
         }
-        Glide.with(context)
+                category = catlist.get(counter).categories ?: emptyList()
+                Glide.with(context)
         .load(catlist.get(counter).url)
         .into(imageView_cat)
         Single.fromCallable({mydb.CatDao().insertCurrent(category)}).subscribeOn(Schedulers.io())
